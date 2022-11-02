@@ -1,0 +1,201 @@
+﻿<Window x:Class="FFmepgTools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="转换工具" Height="auto" Width="600" d:DesignHeight="1005" >
+  <Window.Resources>
+      <ResourceDictionary>
+          <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ScrollViewerStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+          <Style TargetType="GroupBox">
+              <Setter Property="Margin" Value="0,0,0,8" />
+              <Setter Property="BorderBrush" Value="Black"/>
+              <Setter Property="Foreground" Value="Black"/>
+            </Style>
+        </ResourceDictionary>
+  </Window.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="auto" Style="{StaticResource ScrollViewerStyle}">
+        <StackPanel Margin="16">
+            <GroupBox Header="输入" AllowDrop="True" Drop="Drop1">
+                <DockPanel>
+                  <Button Content="选择输入文件/拖拽" Click="ChooseFileButton_Click" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                  <TextBox x:Name="InputFile" TextWrapping="Wrap"  VerticalAlignment="Center" TextChanged="InputFile_TextChanged"/>
+                </DockPanel>
+              </GroupBox>
+            <GroupBox Header="普通工具">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="去掉视频音轨" Click="VideoTrackCloseButton_Click" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <Button Content="提取视频音轨" Click="VideoTrackGetButton_Click" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <StackPanel Orientation="Horizontal"  Margin="0,0,8,0">
+                            <Button Content="调整音量" Click="VolumeButton_Click" VerticalAlignment="Center"/>
+                            <TextBox x:Name="InputVolume" Width="40" VerticalAlignment="Center"  Text="1.0"/>
+                        </StackPanel>
+                        <Button Content="下载m3u8到MP4" VerticalAlignment="Center" Click="M3U8ToMp4Button_Click" Margin="0,0,8,0"/>
+                        <Button Content="转为MP4" VerticalAlignment="Center" Margin="0,0,8,0" Click="ToMp4Button_Click"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox x:Name="IsLoopPlay" Content="循环" IsChecked="True" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <CheckBox x:Name="NoBorder" Content="无边框" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <CheckBox x:Name="TVn" Content="禁用视频" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <CheckBox x:Name="TAn" Content="禁用音频" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox x:Name="TSize" Text="1280x720" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <Button  Content="播放"  VerticalAlignment="Center" Click="PlayButton_Click" Margin="0,0,8,0"/>
+                        <Button Content="播放时" VerticalAlignment="Center" Foreground="Blue" BorderBrush="Transparent" Background="Transparent" Click="PlayDetailsButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="合并音视频">
+                <StackPanel>
+                    <DockPanel AllowDrop="True" Drop="Drop2">
+                        <Button Content="选择音频/拖拽" VerticalAlignment="Center" Click="ChooseAudioButton_Click" Margin="0,0,8,0"/>
+                        <TextBox x:Name="InputAudio" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <CheckBox x:Name="IsMix" Content="混音" IsChecked="False" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <Button Content="音频填充视频" VerticalAlignment="Center" Click="AudioFillVideoButton_Click" Margin="0,0,8,0"/>
+                        <Button Content="视频填充音频" VerticalAlignment="Center" Click="VideoFillAudioButton_Click" Margin="0,0,8,0"/>
+                        <Button Content="合并两个音频" VerticalAlignment="Center" Click="MergaAudioButton_Click" Margin="0,0,8,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="获取视频片段">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="从" VerticalAlignment="Center"/>
+                        <TextBox x:Name="C10" Text="00:00:00" VerticalAlignment="Center" Width="80"/>
+                        <Label Content="开始裁剪" VerticalAlignment="Center"/>
+                        <TextBox x:Name="C11" Text="00:00:10" VerticalAlignment="Center" Width="80"/>
+                        <Label Content="秒" VerticalAlignment="Center"/>
+                        <Button Content="裁剪" VerticalAlignment="Center" Margin="10,0,0,0" Click="TailoringButton_Click"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <Label Content="从" VerticalAlignment="Center"/>
+                        <TextBox x:Name="C20" Text="00:00:00" VerticalAlignment="Center" Width="80"/>
+                        <Label Content="开始，到" VerticalAlignment="Center"/>
+                        <TextBox x:Name="C21" Text="00:00:10" VerticalAlignment="Center" Width="80"/>
+                        <Label Content="结束" VerticalAlignment="Center"/>
+                        <Button Content="裁剪" VerticalAlignment="Center" Margin="10,0,0,0" Click="Tailoring2Button_Click"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        <Label Content="从" VerticalAlignment="Center"/>
+                        <TextBox x:Name="C30" Text="00:00:00" VerticalAlignment="Center" Width="80"/>
+                        <Label Content="开始，到视频结束" VerticalAlignment="Center"/>
+                        <Button Content="裁剪" VerticalAlignment="Center" Margin="10,0,0,0" Click="Tailoring3Button_Click"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="裁剪视频">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="w:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="CIw" Text="600" VerticalAlignment="Center" Width="60"/>
+                        <Label Content="h:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="CIh" Text="600" VerticalAlignment="Center" Width="60"/>
+                        <Label Content="x:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="CIx" Text="(iw-600) / 2" VerticalAlignment="Center" Width="80"/>
+                        <Label Content="y:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="CIy" Text="(ih-600) / 2" VerticalAlignment="Center" Width="80"/>
+                        <Button Content="裁剪" VerticalAlignment="Center" Margin="8,0,0,0" Click="TailoringVideoButton_Click"/>
+                        <Button Content="查看命令详情" VerticalAlignment="Center" Margin="8,0,0,0" Click="LookCmdButton_Click" Background="{x:Null}" Foreground="Blue" BorderBrush="Transparent"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="切片与合并">
+                <Grid>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="每片时长(大概):" VerticalAlignment="Center"/>
+                            <TextBox x:Name="SIss" VerticalAlignment="Center" Text="00:01:00"/>
+                            <Label Content="输出文件后缀:" VerticalAlignment="Center"/>
+                            <TextBox x:Name="SIoExt" VerticalAlignment="Center" Text=".ts"/>
+                            <Label Content="num:" VerticalAlignment="Center"/>
+                            <TextBox x:Name="SNum" VerticalAlignment="Center" Text="8"/>
+                            <Button Content="开始分片" VerticalAlignment="Center" Margin="8,0,0,0" Click="StartShardButton_Click"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="输入配置文件后" VerticalAlignment="Center"/>
+                            <Button Content="合并" VerticalAlignment="Center" Margin="8,0,0,0" Click="MergaShardButton_Click"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="输入一个片视频后" VerticalAlignment="Center"/>
+                            <Button Content="生成合并配置文件" VerticalAlignment="Center" Margin="8,0,0,0" Click="SaveConfigButton_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+          </GroupBox>
+            <GroupBox Header="GIF&lt;=&gt;Video">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="GIF转mp4" Margin="0,0,8,0" VerticalAlignment="Center" Click="GifToMp4Button_Click"/>
+                        <Button Content="GIF转webm" Margin="0,0,8,0" VerticalAlignment="Center" Click="GifToWebmButton_Click"/>
+              </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="GvStart" VerticalAlignment="Center" Text="00:00:00"/>
+                        <Label Content="至" VerticalAlignment="Center"/>
+                        <TextBox x:Name="GvEnd" VerticalAlignment="Center" Text="00:00:10"/>
+                        <Label Content="fps:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                        <TextBox x:Name="GvFps" VerticalAlignment="Center" Text="10"></TextBox>
+                        <Label Content="w:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                        <TextBox x:Name="GvW" VerticalAlignment="Center" Text="320"/>
+                        <Label Content="h:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="GvH" VerticalAlignment="Center" Text="-1"/>
+                        <Button Content="视频转GIF" Margin="8,0,0,0" VerticalAlignment="Center" Click="VideoToGifButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="提取帧">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="GetImgStart" Text="00:00:00" VerticalAlignment="Center"/>
+                        <Label Content="至"/>
+                        <TextBox x:Name="GetImgEnd" Text="00:00:10" VerticalAlignment="Center"/>
+                        <Label Content="每秒取"/>
+                        <TextBox x:Name="GetImgFps" Text="1" VerticalAlignment="Center"/>
+                        <Label Content="帧"/>
+                        <Label Content="num:"/>
+                        <TextBox x:Name="GetImgNum" Text="8" VerticalAlignment="Center"/>
+                        <Button Content="获取图片" Margin="8,0,0,0" Click="GetVideoFrameButton_Click" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="输入一张帧图片后"/>
+                        <Label Content="num:"/>
+                        <TextBox x:Name="GetImgNum2" Text="8" VerticalAlignment="Center"/>
+                        <Button Content="合成MP4" Margin="8,0,0,0" Click="MergaFrameToVideoButton_Click" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="图片格式转换">
+                <StackPanel Orientation="Horizontal">
+                      <TextBox x:Name="ToneWType" Text=".webp" Width="60" VerticalAlignment="Center"/>
+                      <Button Content="转换" VerticalAlignment="Center" Click="ImageFormatSwitchButton_Click" Margin="8,0,0,0"/>
+                      <Button Content="批量转换" VerticalAlignment="Center" Click="BatchImageFormatSwitchButton_Click" Margin="8,0,0,0"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="转换视频帧率/比特率">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="帧率转为" VerticalAlignment="Center" Click="VideoFPSButton_Click"/>
+                        <TextBox x:Name="ToFps" Text="30" Width="30" VerticalAlignment="Center"/>
+                        <Label Content="fps" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="比特率转为" VerticalAlignment="Center" Click="VideoBitRateButton_Click"/>
+                        <TextBox x:Name="ToBitRate" Text="800k" Width="50" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+
+</Window>
+
